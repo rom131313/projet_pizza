@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -17,28 +18,47 @@ namespace projet_pizza
 
     class PizzaPersonnalisee : Pizza
     {
-        public PizzaPersonnalisee(): base("Personnalisee", 5, false, null)
+        static int nbPizzaPersonnalisee = 0;
+
+        public PizzaPersonnalisee(): base("Personnalisée", 5, false, null)
         {
+            // index 
+            // nom = ...
+            nbPizzaPersonnalisee++;
+            nom = "Personnalisée " + nbPizzaPersonnalisee;
+
             ingredients = new List<string>();
 
             while (true)
             {
-                Console.Write("Rentrez un ingrédient pour la pizza personnalisée (ENTER pour terminer) : ");
+                Console.Write("Rentrez un ingrédient pour la pizza personnalisée " + nbPizzaPersonnalisee + "(ENTER pour terminer) : ");
                 var ingredient = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(ingredient))
                 {
                     break;
                 }
-                ingredients.Add(ingredient);
+                if (ingredients.Contains(ingredient))
+                {
+                    Console.WriteLine("ERREUR : Cet inrédient est déjà présent dans la pizza.");
+                }
+                else
+                {
+                    ingredients.Add(ingredient);
+                    Console.WriteLine(string.Join(", ", ingredients));
+                }
+                Console.WriteLine();
             }
 
+            prix = 5 + ingredients.Count * 1.5f;
         }
+
+        
     }
 
     class Pizza
     {
-        string nom;
-        public float prix { get; private set; }
+        protected string nom;
+        public float prix { get; protected set; }
         public bool vegetarienne { get; private set; }
         public List<string> ingredients { get; protected set; }
 
@@ -118,6 +138,7 @@ namespace projet_pizza
                 new Pizza("margherita", 8f, true, new List<string> { "sauce tomate", "mozzarella", "basilic" }),
                 new Pizza("Calzone", 12f, false, new List<string> { "tomate", "jambon", "persil", "oignons"}),
                 new Pizza("complète", 9.5f, false, new List<string> { "jambon", "oeuf", "fromage" }),
+                new PizzaPersonnalisee(),
                 new PizzaPersonnalisee()
 
             };
