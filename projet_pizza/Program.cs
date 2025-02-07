@@ -10,7 +10,7 @@ namespace projet_pizza
         string nom;
         public float prix { get; private set; }
         public bool vegetarienne { get; private set; }
-        List<string> ingredients;
+        public List<string> ingredients;
 
         public Pizza(string nom, float prix, bool vegetarienne, List<string> ingredients)
         {
@@ -59,6 +59,11 @@ namespace projet_pizza
 
             return resultat;
         }
+
+        public bool ContientIngredient(string ingredient)
+        {
+            return ingredients.Where(i => i.ToLower().Contains(ingredient)).ToList().Count > 0;
+        }
     }
 
     class Program
@@ -85,7 +90,8 @@ namespace projet_pizza
                 new Pizza("complète", 9.5f, false, new List<string> { "jambon", "oeuf", "fromage" }),
             };
 
-            pizzas = pizzas.Where(p => p.vegetarienne).ToList();
+            //pizzas = pizzas.Where(p => p.vegetarienne).ToList();
+            pizzas = pizzas.Where(p => p.ContientIngredient("oignon")).ToList();
 
 
             foreach (var pizza in pizzas)
